@@ -25,6 +25,7 @@
 
 (in-package :cl-user)
 (defpackage :${PROJECT_NAME}.test
-  (:use :cl)
+  (:use :cl :rove)
+  (:import-from :${PROJECT_NAME})
   (:nicknames :${PROJECT_NAME}.test))
 (in-package :${PROJECT_NAME}.test)

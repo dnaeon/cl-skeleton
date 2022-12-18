@@ -43,5 +43,5 @@
   :components ((:module "tests"
                 :pathname #P"tests/"
                 :serial t
-                :components ((:file "package"))))
+                :components ((:file "test-suite"))))
   :perform (test-op (op c) (uiop:symbol-call :rove :run-suite :${PROJECT_NAME}.test)))
