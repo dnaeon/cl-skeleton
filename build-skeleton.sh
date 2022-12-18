@@ -36,24 +36,28 @@ function _msg_error() {
 
 # Prints usage info and exits
 function _usage() {
-    echo "${_SCRIPT_NAME} [expand|delete-templates]"
+    echo "${_SCRIPT_NAME} [expand|dry-run]"
     exit 64  # EX_USAGE
 }
 
 # Expands any template files
+#
+# $1: execute in dry-run, if set to true
 function _expand_templates() {
-    for _tmpl_file in $( find . -name "*${_TEMPLATE_SUFFIX}" ); do
-        _expanded=$( echo "${_tmpl_file}" | sed -e "s|${_TEMPLATE_SUFFIX}||g" )
-        _msg_info "Expanding template file ${_tmpl_file} ..."
-        envsubst < "${_tmpl_file}" > "${_expanded}"
-    done
-}
+    local _dry_run_mode="${1}"
 
-# Deletes any template files
-function _delete_templates() {
     for _tmpl_file in $( find . -name "*${_TEMPLATE_SUFFIX}" ); do
+        _expanded=$( echo "${_tmpl_file}" | sed -e "s|${_TEMPLATE_SUFFIX}||g" -e "s|^cl-skeleton|${PROJECT_NAME}|g" )
+        _msg_info "Expanding template file ${_tmpl_file} ..."
+        if [ "${_dry_run_mode}" == "false" ]; then
+            cp --preserve=mode "${_tmpl_file}" "${_expanded}"
+            envsubst < "${_tmpl_file}" > "${_expanded}"
+        fi
         _msg_info "Deleting template file ${_tmpl_file} ..."
-        rm -f "${_tmpl_file}"
+
+        if [ "${_dry_run_mode}" == "false" ]; then
+            rm -f "${_tmpl_file}"
+        fi
     done
 }
 
@@ -69,7 +73,7 @@ function _main() {
 
     # Source project variables, if any.
     if [ ! -f "${_project_vars}" ]; then
-	_msg_error "Skeleton variables not found: ${_project_vars}" 1
+        _msg_error "Skeleton variables not found: ${_project_vars}" 1
 
     fi
 
@@ -79,10 +83,10 @@ function _main() {
 
     case "${_cmd}" in
         expand)
-            _expand_templates
+            _expand_templates "false"
             ;;
-        delete-templates)
-            _delete_templates
+        dry-run)
+            _expand_templates "true"
             ;;
         *)
             _usage
