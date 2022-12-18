@@ -47,7 +47,7 @@ function _expand_templates() {
     local _dry_run_mode="${1}"
 
     for _tmpl_file in $( find . -name "*${_TEMPLATE_SUFFIX}" ); do
-        _expanded=$( echo "${_tmpl_file}" | sed -e "s|${_TEMPLATE_SUFFIX}||g" -e "s|^cl-skeleton|${PROJECT_NAME}|g" )
+        _expanded=$( echo "${_tmpl_file}" | sed -e "s|${_TEMPLATE_SUFFIX}||g" -e "s|cl-skeleton|${PROJECT_NAME}|g" )
         _msg_info "Expanding template file ${_tmpl_file} ..."
         if [ "${_dry_run_mode}" == "false" ]; then
             cp --preserve=mode "${_tmpl_file}" "${_expanded}"
