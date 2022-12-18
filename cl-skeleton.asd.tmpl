@@ -40,7 +40,7 @@
   :homepage "https://github.com/${GITHUB_USERNAME}/${PROJECT_NAME}"
   :bug-tracker "https://github.com/${GITHUB_USERNAME}/${PROJECT_NAME}"
   :source-control "https://github.com/${GITHUB_USERNAME}/${PROJECT_NAME}"
-  :depends-on ()
+  :depends-on (:cl-reexport)
   :components ((:module "core"
                 :pathname #P"src/"
                 :components ((:file "core")))

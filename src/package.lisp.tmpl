@@ -26,5 +26,9 @@
 (in-package :cl-user)
 (defpackage :${PROJECT_NAME}
   (:use :cl)
+  (:import-from :${PROJECT_NAME}.core)
+  (:import-from :cl-reexport)
   (:nicknames :${PROJECT_NAME}))
 (in-package :${PROJECT_NAME})
+
+(cl-reexport:reexport-from :${PROJECT_NAME}.core)
