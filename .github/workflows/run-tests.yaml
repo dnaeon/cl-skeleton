@@ -1,4 +1,4 @@
-# .github/workflows/test.yaml
+# .github/workflows/run-tests.yaml
 name: test
 on: [ push, pull_request ]
 jobs:
