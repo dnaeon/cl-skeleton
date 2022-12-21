@@ -8,12 +8,27 @@ name: docker-image
 on: [ push, pull_request ]
 jobs:
   docker-image:
+    strategy:
+      fail-fast: false
+      matrix:
+        implementation:
+          - sbcl
+          - ecl
+          - ccl
+        include:
+          - implementation: sbcl
+            dockerfile: Dockerfile.sbcl
+          - implementation: ecl
+            dockerfile: Dockerfile.ecl
+          - implementation: ccl
+            dockerfile: Dockerfile.ccl
     runs-on: ubuntu-latest
     steps:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
-      - name: Build Docker image
+      - name: Build Docker image - ${{ matrix.implementation }}
         uses: docker/build-push-action@v3
         with:
           push: false
-          tags: ${PROJECT_NAME}:latest
+          file: ${{ matrix.dockerfile }}
+          tags: ${GITHUB_USERNAME}/${PROJECT_NAME}:${{ matrix.implementation }}-latest

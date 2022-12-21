@@ -70,15 +70,20 @@ function _main() {
     fi
 
     local _project_vars="${_SCRIPT_DIR}/project-vars.env"
+    local _project_literals="${_SCRIPT_DIR}/project-literals.env"
 
     # Source project variables, if any.
     if [ ! -f "${_project_vars}" ]; then
         _msg_error "Skeleton variables not found: ${_project_vars}" 1
-
     fi
 
     set -a
+    # Source project-specific variables
     source "${_project_vars}"
+    # Source literals, if any
+    if [ -f "${_project_literals}" ]; then
+        source "${_project_literals}"
+    fi
     set +a
 
     case "${_cmd}" in
