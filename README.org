@@ -1,0 +1,65 @@
+* cl-skeleton
+
+=cl-skeleton= is my personal project template for Common Lisp.
+
+No fancy stuff and template engines, just plain old shell script and
+=envsubst=.
+
+The generated Common Lisp system includes a main ASDF system
+definition, a test system definition, scripts for running the tests,
+Dockerfiles for ECL, CCL and SBCL implementations and Github Actions
+for building Docker images and running the test suite of the project.
+
+* Usage
+
+Clone the repo.
+
+#+begin_src shell
+  git clone https://github.com/dnaeon/cl-skeleton.git
+#+end_src
+
+Then copy the =cl-skeleton= directory, which will become your new
+Common Lisp project. For example if you are starting a new project
+called =cl-foobar= you would execute this command.
+
+#+begin_src shell
+  cp -a cl-skeleton cl-foobar
+#+end_src
+
+Navigate to the directory you've just copied and edit the
+=project-vars.env= file. Set the project name, author name, email,
+Github username, etc.
+
+#+begin_src shell
+  cd cl-foobar
+  # Edit project-vars.env file
+#+end_src
+
+Once ready with the changes, execute the following command which will
+set things up for you.
+
+#+begin_src shell
+  ./build-skeleton.sh expand
+#+end_src
+
+Remove the skeleton files and start fresh.
+
+#+begin_src shell
+  rm build-skeleton.sh project-vars.env literal-vars.env
+  rm -rf .git
+  git add .
+  git commit -m 'Initial commit'
+#+end_src
+
+* Contributing
+
+=cl=skeleton= is hosted on [[https://github.com/dnaeon/cl-skeleton][Github]]. Please contribute by reporting
+issues, suggesting features or by sending patches using pull requests.
+
+* Authors
+
+- Marin Atanasov Nikolov <[[mailto:dnaeon@gmail.com][dnaeon@gmail.com]]>
+
+* License
+
+This project is Open Source and licensed under the [[http://opensource.org/licenses/BSD-2-Clause][BSD License]].
