@@ -45,15 +45,6 @@ instead, e.g.
 env LISP=sbcl ./scripts/run-tests.sh
 #+end_src
 
-Here's how to run the tests against SBCL, CCL and ECL for example.
-
-#+begin_src shell
-for lisp in sbcl ccl ecl; do
-    echo "Running tests using ${lisp} ..."
-    env LISP=${lisp} make test > ${lisp}-tests.out
-done
-#+end_src
-
 * Contributing
 
 =${PROJECT_NAME}= is hosted on [[https://github.com/${GITHUB_USERNAME}/${PROJECT_NAME}][Github]]. Please contribute by reporting

@@ -45,10 +45,9 @@ set things up for you.
 Remove the skeleton files and start fresh.
 
 #+begin_src shell
-  rm build-skeleton.sh project-vars.env literal-vars.env
+  rm build-skeleton.sh project-vars.env project-literals.env
   rm -rf .git
-  git add .
-  git commit -m 'Initial commit'
+  git init && git add . && git commit -m 'Initial commit'
 #+end_src
 
 * Contributing
