@@ -3,7 +3,7 @@
 =cl-skeleton= is my personal project template for Common Lisp.
 
 No fancy stuff and template engines, just plain old shell script and
-=envsubst=.
+=envsubst(1)=.
 
 The generated Common Lisp system includes a main ASDF system
 definition, a test system definition, scripts for running the tests,
@@ -52,7 +52,7 @@ Remove the skeleton files and start fresh.
 
 * Contributing
 
-=cl=skeleton= is hosted on [[https://github.com/dnaeon/cl-skeleton][Github]]. Please contribute by reporting
+=cl-skeleton= is hosted on [[https://github.com/dnaeon/cl-skeleton][Github]]. Please contribute by reporting
 issues, suggesting features or by sending patches using pull requests.
 
 * Authors
