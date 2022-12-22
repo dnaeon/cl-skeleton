@@ -18,35 +18,27 @@ Clone the repo.
   git clone https://github.com/dnaeon/cl-skeleton.git
 #+end_src
 
-Then copy the =cl-skeleton= directory, which will become your new
-Common Lisp project. For example if you are starting a new project
-called =cl-foobar= you would execute this command.
+Navigate to the repo you've just cloned and edit the
+=project-vars.env= file.
 
 #+begin_src shell
-  cp -a cl-skeleton cl-foobar
-#+end_src
-
-Navigate to the directory you've just copied and edit the
-=project-vars.env= file. Set the project name, author name, email,
-Github username, etc.
-
-#+begin_src shell
-  cd cl-foobar
+  cd cl-skeleton
   # Edit project-vars.env file
 #+end_src
 
 Once ready with the changes, execute the following command which will
-set things up for you.
+set things up for you. You need to provide a path for your Common Lisp
+project. For example, if your new project will reside in
+=~/Projects/lisp/cl-foobar= you would execute this command.
 
 #+begin_src shell
-  ./build-skeleton.sh expand
+  ./build-skeleton.sh expand ~/Projects/lisp/cl-foobar
 #+end_src
 
-Remove the skeleton files and start fresh.
+Review the generated files, initialize a new Git repo and commit.
 
 #+begin_src shell
-  rm build-skeleton.sh project-vars.env project-literals.env
-  rm -rf .git
+  cd ~/Projects/lisp/cl-foobar
   git init && git add . && git commit -m 'Initial commit'
 #+end_src
 

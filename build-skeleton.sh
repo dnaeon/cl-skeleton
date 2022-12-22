@@ -7,6 +7,7 @@ set -e
 
 _SCRIPT_NAME="${0##*/}"
 _SCRIPT_DIR=$( dirname `readlink -f -- "${0}"` )
+_BASE_PROJECT_DIR="${_SCRIPT_DIR}"
 
 # Files with the following extension are considered templates and will
 # be expanded
@@ -36,36 +37,68 @@ function _msg_error() {
 
 # Prints usage info and exits
 function _usage() {
-    echo "${_SCRIPT_NAME} [expand|dry-run]"
+    echo "Usage: ${_SCRIPT_NAME} expand /path/to/new/cl-project"
     exit 64  # EX_USAGE
+}
+
+# Copies the project files into the new target directory
+#
+# $1: Path to the new project
+function _copy_project_files() {
+    local _new_project_path="${1}"
+
+    _msg_info "Creating new project in ${_new_project_path} ..."
+    mkdir -p "${_new_project_path}"
+
+    for _dir in $( find "${_BASE_PROJECT_DIR}" \
+                        -maxdepth 1 \
+                        -type d \
+                        -and -not -path "${_BASE_PROJECT_DIR}" \
+                        -and -not -path "${_BASE_PROJECT_DIR}/.git" \
+                        -print ); do
+        _msg_info "Copying directory $( basename ${_dir} )/ into ${_new_project_path}/"
+        cp -a "${_dir}" "${_new_project_path}/"
+    done
+
+    for _file in $( find "${_BASE_PROJECT_DIR}" \
+                         -maxdepth 1 \
+                         -type f \
+                         -not -name "project-vars.env" \
+                         -and -not -name "project-literals.env" \
+                         -and -not -name "build-skeleton.sh" \
+                         -print ); do
+        _msg_info "Copying file $( basename ${_file} ) into ${_new_project_path}/"
+        cp --preserve=mode "${_file}" "${_new_project_path}/"
+    done
 }
 
 # Expands any template files
 #
-# $1: execute in dry-run, if set to true
+# $1: Path to the new project
 function _expand_templates() {
-    local _dry_run_mode="${1}"
+    local _new_project_path="${1}"
+    local _oldpwd="${OLDPWD}"
 
+    cd "${_new_project_path}"
     for _tmpl_file in $( find . -name "*${_TEMPLATE_SUFFIX}" ); do
         _expanded=$( echo "${_tmpl_file}" | sed -e "s|${_TEMPLATE_SUFFIX}||g" -e "s|cl-skeleton|${PROJECT_NAME}|g" )
-        _msg_info "Expanding template file ${_tmpl_file} ..."
-        if [ "${_dry_run_mode}" == "false" ]; then
-            cp --preserve=mode "${_tmpl_file}" "${_expanded}"
-            envsubst < "${_tmpl_file}" > "${_expanded}"
-        fi
-        _msg_info "Deleting template file ${_tmpl_file} ..."
+        _msg_info "Expanding template ${_tmpl_file} into ${_expanded} ..."
+        cp --preserve=mode "${_tmpl_file}" "${_expanded}"
+        envsubst < "${_tmpl_file}" > "${_expanded}"
 
-        if [ "${_dry_run_mode}" == "false" ]; then
-            rm -f "${_tmpl_file}"
-        fi
+        _msg_info "Deleting template ${_tmpl_file} ..."
+        rm -f "${_tmpl_file}"
     done
+
+    cd "${_oldpwd}"
 }
 
 # Main entrypoint
 function _main() {
     local _cmd="${1}"
+    local _new_project_path="${2}"
 
-    if [[ $# -lt 1 ]]; then
+    if [[ $# -lt 2 ]]; then
         _usage
     fi
 
@@ -88,10 +121,8 @@ function _main() {
 
     case "${_cmd}" in
         expand)
-            _expand_templates "false"
-            ;;
-        dry-run)
-            _expand_templates "true"
+            _copy_project_files "${_new_project_path}"
+            _expand_templates "${_new_project_path}"
             ;;
         *)
             _usage
