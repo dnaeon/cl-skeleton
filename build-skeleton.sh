@@ -90,7 +90,7 @@ function _copy_project_files() {
                          -and -not -name "build-skeleton.sh" \
                          -print ); do
         _msg_info "Copying file $( basename ${_file} ) into ${_new_project_path}/"
-        cp --preserve=mode "${_file}" "${_new_project_path}/"
+        cp -p "${_file}" "${_new_project_path}/"
     done
 }
 
@@ -105,7 +105,7 @@ function _expand_templates() {
     for _tmpl_file in $( find . -name "*${_TEMPLATE_SUFFIX}" ); do
         _expanded=$( echo "${_tmpl_file}" | sed -e "s|${_TEMPLATE_SUFFIX}||g" -e "s|cl-skeleton|${PROJECT_NAME}|g" )
         _msg_info "Expanding template ${_tmpl_file} into ${_expanded} ..."
-        cp --preserve=mode "${_tmpl_file}" "${_expanded}"
+        cp -p "${_tmpl_file}" "${_expanded}"
         envsubst < "${_tmpl_file}" > "${_expanded}"
 
         _msg_info "Deleting template ${_tmpl_file} ..."
